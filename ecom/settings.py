@@ -13,7 +13,6 @@ import os
 import environ
 
 from corsheaders.defaults import default_headers
-from pathlib import Path
 
 env = environ.Env()
 environ.Env.read_env()
@@ -45,7 +44,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'products',
-    'rest_framework_simplejwt.token_blacklist'
+    'suppliers',
+    'purchases',
+    'sales'
 ]
 
 MIDDLEWARE = [
@@ -156,7 +157,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

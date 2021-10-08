@@ -1,10 +1,10 @@
+from django.contrib.auth import authenticate
 # rest_framework
 from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 # permissions
 from .permissions import IsVendorUser
-from django.contrib.auth import authenticate
 # serializers
 from .serializers import RegisterSerializer, LoginSerializer
 
@@ -50,46 +50,3 @@ class LoginAPIView(generics.GenericAPIView):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response({'message': "Invalid credentials, try again"}, status=status.HTTP_401_UNAUTHORIZED)
-
-# AUTH VIEWS
-# class TokenObtainPairView(TokenViewBase):
-#     """
-#         Return JWT tokens (access and refresh) for specific user based on username and password.
-#     """
-#     serializer_class = TokenObtainLifetimeSerializer
-
-
-# class TokenRefreshView(TokenViewBase):
-#     """
-#         Renew tokens (access and refresh) with new expire time based on specific user's access token.
-#     """
-#     serializer_class = TokenRefreshLifetimeSerializer
-
-# class UserView(generics.ListAPIView):
-#     # queryset = User.objects.filter(is_active=True)
-#     # serializer_class = UserModelSerializer
-#     lookup_field = 'username'
-
-#     def get(self, request):
-#         queryset = User.objects.all()
-#         serializer = UserModelSerializer(queryset, many = True)
-#         return Response(serializer.data) 
-
-# class UserLoginView(generics.CreateAPIView):
-#     def post(self, request):
-#         serializer = UserLoginSerializer(data = request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user, token = serializer.save()
-#         data = {
-#             'user': UserModelSerializer(user).data,
-#             'access_token': token
-#         }
-#         return Response(data, status=status.HTTP_200_OK)
-
-# class UserSignUpView(generics.CreateAPIView):
-#     def post(self, request):
-#         serializer = UserSignUpSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.save()
-#         data = UserModelSerializer(user).data
-#         return Response(data, status=status.HTTP_201_CREATED)

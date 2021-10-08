@@ -79,7 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects =  MyUserManager()
 
-    is_vendor = models.BooleanField(default=False)
+    is_vendor = models.BooleanField(default=True)
 
     @property
     def token(self):
@@ -89,13 +89,3 @@ class User(AbstractBaseUser, PermissionsMixin):
             settings.SECRET_KEY, algorithm='HS256')
 
         return token
-
-# class Supplier(models.Model):
-#     name = models.CharField(max_length=200)
-#     email = models.EmailField()
-#     phone_number = models.CharField(max_length=20)
-#     address = models.TextField()
-#     location = models.CharField(max_length=100)
-
-#     def __str__(self) -> str:
-#         return self.name
