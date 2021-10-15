@@ -1,50 +1,36 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
 from django.db import models
-from datetime import datetime, timedelta
-import jwt
+from datetime import datetime
 
-class MyUserManager(UserManager):
+class MyUserManager(BaseUserManager):
 
-    def _create_user(self, username, email, password, **extra_fields):
-        """
-        Create and save a user with the given username, email, and password.
-        """
-        if not username:
-            raise ValueError('The given username must be set')
-
-        if not email:
-            raise ValueError('The given email must be set')
-
-        email = self.normalize_email(email)
-        username = self.model.normalize_username(username)
-        user = self.model(username=username, email=email, **extra_fields)
+    def _create_user(self, username, email, name, last_name, password, is_staff, is_superuser, **extra_fields):
+        user = self.model(
+            username = username,
+            email = email,
+            name = name,
+            last_name = last_name,
+            is_staff = is_staff,
+            is_superuser = is_superuser,
+            **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(username, email, password, **extra_fields)
+    def create_user(self, username, email, name, last_name, password=None, **extra_fields):
+        return self._create_user(username, email, name,last_name, password, False, False, **extra_fields)
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+    def create_superuser(self, username, email, name,last_name, password=None, **extra_fields):
+        return self._create_user(username, email, name,last_name, password, True, True, **extra_fields)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-
-        return self._create_user(username, email, password, **extra_fields)
         
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
-
     username = models.CharField(
         _('username'),
         max_length=150,
@@ -56,6 +42,8 @@ class User(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that username already exists."),
         },
     )
+    name = models.CharField('Nombres', max_length = 255, blank = True, null = True)
+    last_name = models.CharField('Apellidos', max_length = 255, blank = True, null = True)
     email = models.EmailField('email address',unique=True)
     is_staff = models.BooleanField(
         _('staff status'),
@@ -72,20 +60,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=datetime.now)
-    
-    USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
 
     objects =  MyUserManager()
+    
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'name', 'last_name']
 
-    is_vendor = models.BooleanField(default=True)
-
-    @property
-    def token(self):
-        token = jwt.encode(
-            {'username': self.username, 'email': self.email,
-                'exp': datetime.utcnow() + timedelta(hours=24)},
-            settings.SECRET_KEY, algorithm='HS256')
-
-        return token
+    is_vendor = models.BooleanField(default=False)

@@ -1,46 +1,23 @@
-# rest framework
 from rest_framework import serializers
-from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.tokens import RefreshToken
-# models
-from .models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-# USER
-class RegisterSerializer(serializers.ModelSerializer):
+from users.models import User
 
-    password = serializers.CharField(
-        max_length=128, min_length=6, write_only=True)
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    pass
 
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password','is_vendor')
+        fields = ('username','email','name','last_name')
 
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
-
-
-class LoginSerializer(serializers.ModelSerializer):
-
-    password = serializers.CharField(
-        max_length=128, min_length=6, write_only=True)
-
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'token')
-
-        read_only_fields = ['token']
-
-# class LogoutSerializer(serializers.Serializer):
-#     refresh = serializers.CharField()
-
-#     def validate(self, attrs):
-#         self.token = attrs['refresh']
-
-#         return attrs
-
-#     def save(self, **kwargs):
-#         try:
-#             RefreshToken(self.token).blacklist()
-#         except TokenError:
-#             pass
-#         RefreshToken(self.token).blacklist()
+        fields = '__all__'
+    
+    def create(self,validated_data):
+        user = User(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user

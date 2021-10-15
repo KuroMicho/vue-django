@@ -38,7 +38,7 @@ export default {
           : false,
       };
       getApi
-        .patch(`/products/${this.id}`, colorPatched, {
+        .patch(`/product/${this.id}`, colorPatched, {
           headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
         })
         .then((res) => console.log(res.data));

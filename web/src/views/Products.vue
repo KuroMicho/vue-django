@@ -90,7 +90,7 @@ export default {
         headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
       })
       .then((res) => {
-        this.$store.state.APIData = res.data;
+        this.$store.state.APIData = res.data.data;
       })
       .catch((err) => {
         console.error(err);

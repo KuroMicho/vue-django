@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+from datetime import timedelta
 import environ
 
 from corsheaders.defaults import default_headers
@@ -30,24 +31,34 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+r"^https://\w+\.localhost\.com$",
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + ['contenttype']
 
 
 # Application definition
+BASE_APPS = [ 'django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.messages','django.contrib.staticfiles']
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'corsheaders',
-    'users',
-    'products',
-    'suppliers',
-    'purchases',
-    'sales'
-]
+LOCAL_APPS = [ 'users','products','suppliers','purchases','sales']
+
+THIRD_APPS = [  'rest_framework','rest_framework_simplejwt','rest_framework_simplejwt.token_blacklist','corsheaders']
+
+INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,17 +71,18 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-]
+REST_FRAMEWORK = {
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.AllowAny',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-r"^https://\w+\.localhost\.com$",
-]
-
-CORS_ALLOW_HEADERS = list(default_headers) + ['contenttype']
+AUTH_USER_MODEL = 'users.User'
 ROOT_URLCONF = 'ecom.urls'
+
 
 TEMPLATES = [
     {
@@ -112,8 +124,6 @@ DATABASES = {
         'PORT': env('POSTGRES_PORT'),
     }
 }
-
-AUTH_USER_MODEL = 'users.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -165,10 +175,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',)
 # }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'users.jwt.JWTAuthentication',
-    ],
-    'DEFAULT_PAGINATION_CLASS': "rest_framework.pagination.PageNumberPagination",
-    'PAGE_SIZE': 12
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'users.jwt.JWTAuthentication',
+#     ],
+#     'DEFAULT_PAGINATION_CLASS': "rest_framework.pagination.PageNumberPagination",
+#     'PAGE_SIZE': 12
+# }
+

@@ -27,7 +27,7 @@ class ProductCreateView(generics.CreateAPIView):
 
 # GET ALL PRODUCTS
 class ProductsRetrieveView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated, IsVendorUser)
+    # permission_classes = (IsAuthenticated, IsVendorUser)
     queryset =  Product.objects.all()
 
     def get(self, request, *args, **kwargs):

@@ -8,7 +8,7 @@ class Product(models.Model):
     barcode = models.CharField(blank=False, unique=True, default='123456789', max_length=10)
     name = models.CharField(max_length=100, blank=False)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to="media", default='image.jpg', blank=False)
+    image = models.URLField(blank=False, max_length=200)
     color = models.JSONField(blank=True, default=jsonfield_default_value)
     material = models.JSONField(blank=True, default=jsonfield_default_value)
     size = models.JSONField(blank=True, default=jsonfield_default_value)
