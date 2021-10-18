@@ -7,7 +7,7 @@ from datetime import datetime
 
 class MyUserManager(BaseUserManager):
 
-    def _create_user(self, username, email, name, last_name, password, is_staff, is_superuser, **extra_fields):
+    def _create_user(self, username, email, name, last_name, password, is_staff, is_superuser, is_vendor, **extra_fields):
         user = self.model(
             username = username,
             email = email,
@@ -15,6 +15,7 @@ class MyUserManager(BaseUserManager):
             last_name = last_name,
             is_staff = is_staff,
             is_superuser = is_superuser,
+            is_vendor = is_vendor,
             **extra_fields
         )
         user.set_password(password)
@@ -22,10 +23,10 @@ class MyUserManager(BaseUserManager):
         return user
 
     def create_user(self, username, email, name, last_name, password=None, **extra_fields):
-        return self._create_user(username, email, name,last_name, password, False, False, **extra_fields)
+        return self._create_user(username, email, name,last_name, password, False, False, False, **extra_fields)
 
     def create_superuser(self, username, email, name,last_name, password=None, **extra_fields):
-        return self._create_user(username, email, name,last_name, password, True, True, **extra_fields)
+        return self._create_user(username, email, name,last_name, password, True, True, True, **extra_fields)
 
         
 # Create your models here.
@@ -42,8 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that username already exists."),
         },
     )
-    name = models.CharField('Nombres', max_length = 255, blank = True, null = True)
-    last_name = models.CharField('Apellidos', max_length = 255, blank = True, null = True)
+    name = models.CharField('name', max_length = 255, blank = True, null = True)
+    last_name = models.CharField('last name', max_length = 255, blank = True, null = True)
     email = models.EmailField('email address',unique=True)
     is_staff = models.BooleanField(
         _('staff status'),

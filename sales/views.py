@@ -16,7 +16,7 @@ from sales.serializers import SaleSerializer
 
 class SaleCreateView(generics.CreateAPIView):
     
-    permission_classes = (IsAuthenticated,IsVendorUser)
+    permission_classes = (IsAuthenticated, IsVendorUser,)
 
     def post(self, request, product_id, *args, **kwargs):
         """
@@ -38,7 +38,7 @@ class SaleCreateView(generics.CreateAPIView):
         return Response({"status": "You are not allowed to sale more products, minimum required reaching"}, status=status.HTTP_400_BAD_REQUEST)
 
 class SalesRetrieveView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated, IsVendorUser)
+    permission_classes = (IsAuthenticated, IsVendorUser,)
 
     def get(self, request, product_id, *args, **kwargs):
         """

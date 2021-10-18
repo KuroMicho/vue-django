@@ -31,17 +31,31 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
+
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 CORS_ALLOWED_ORIGIN_REGEXES = [
 r"^https://\w+\.localhost\.com$",
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + ['contenttype']
 
+# For Cookie
+CSRF_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_SAMESITE = 'None'
 
 # Application definition
 BASE_APPS = [ 'django.contrib.admin','django.contrib.auth','django.contrib.contenttypes','django.contrib.sessions','django.contrib.messages','django.contrib.staticfiles']

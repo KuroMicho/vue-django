@@ -5,17 +5,31 @@
     </router-link>
     <ul>
       <li>
-        <router-link to="/products">Productos</router-link>
-        <router-link v-if="accessToken" to="/logout">Logout</router-link>
+        <router-link v-show="!user" to="/login">Login</router-link>
+        <router-link v-show="!user" to="/register">Register</router-link>
+
+        <router-link v-if="user.is_vendor" to="/products"
+          >Productos</router-link
+        >
+        <router-link v-if="user.is_staff" to="/purchases"
+          >Purchases</router-link
+        >
+        <router-link v-if="user.is_staff" to="/users">Users</router-link>
+        <router-link v-if="user" to="/user">Profile</router-link>
+        <router-link v-if="user" to="/logout">Logout</router-link>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
 export default {
   name: "Navbar",
-  computed: mapState(["accessToken"]),
+  data() {
+    return { user: 0 };
+  },
+  mounted() {
+    this.user = this.$store.state.auth.user.user;
+  },
 };
 </script>
 <style scoped>

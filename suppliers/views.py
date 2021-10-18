@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 # rest_framework
 from rest_framework.response import Response
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 # models
 from .models import Supplier
 # serializers
@@ -16,7 +16,7 @@ from .serializers import SupplierSerializer
 # PROVEEDOR VISTAS
 
 class SupplierGenericView(generics.GenericAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     queryset =  Supplier.objects.all()
 
@@ -40,7 +40,7 @@ class SupplierGenericView(generics.GenericAPIView):
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class SupplierRUDView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def get(self, request, id=None, *args, **kwargs):
         """

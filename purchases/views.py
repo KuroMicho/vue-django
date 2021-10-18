@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 # rest_framework
 from rest_framework.response import Response
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 # models
 from .models import Product, Purchase
@@ -17,7 +17,7 @@ from .serializers import PurchaseSerializer
 # PURCHASE VIEWS
 
 class PurchasesRetrieveView(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser,)
     # Crear Modal para pasar id en url.
 
     def get(self, request, product_id, *args, **kwargs):
@@ -29,7 +29,7 @@ class PurchasesRetrieveView(generics.RetrieveAPIView):
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class PurchaseCreateView(generics.CreateAPIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsAdminUser,)
 
     def post(self, request, product_id, *args, **kwargs):
         """

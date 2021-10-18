@@ -2,7 +2,7 @@
   <div>
     <Navbar />
     <div class="products">
-      <div v-for="product in APIData" :key="product.id">
+      <div v-for="product in products" :key="product.id">
         <table>
           <th>id</th>
           <th>Nombre</th>
@@ -20,62 +20,38 @@
               {{ product.description }}
             </td>
             <td>SamsanTech</td>
-            <!-- <td
-              class="color"
-              v-for="(color, index) in product.color"
-              :key="index"
-            >
-              {{ color }}
-              <i
-                class="fas fa-times"
-                @click="
-                  $emit('pull_color', { productId: product.id, colorId: index })
-                "
-              ></i>
-            </td> -->
-            <td class="edit" v-if="product && product.id">
-              <router-link :to="`/products/${product.id}`">Editar</router-link>
-              <div v-show="showModal" class="modal-route">
-                <div class="modal-content">
-                  <router-view></router-view>
-                </div>
-              </div>
-              <!-- <p @click="this.$route.push({})">editar</p> -->
-              <!-- <router-link
-                :to="{
-                  name: 'Product',
-                  params: { id: product.id, product: product },
-                }"
-                >Edit</router-link
-              > -->
-            </td>
+            <router-link :to="`/products/${product.id}`">Editar</router-link>
           </tbody>
         </table>
       </div>
+      <!-- <div class="edit">
+        <div v-show="showModal" class="modal-route">
+          <div class="modal-content">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script>
+import { mapState, mapActions } from "vuex";
 import Navbar from "../components/Navbar.vue";
-import { getApi } from "../utils/axios";
-import { mapState } from "vuex";
 export default {
   name: "Products",
-  props: {
-    products: Array,
-  },
   data() {
     return {
+      loading: false,
       showModal: false,
     };
   },
   components: { Navbar },
-  computed: mapState(["APIData"]),
-  // onidle() {
-  //   this.$store.dispatch("userLogout").then(() => {
-  //     this.$router.push({ name: "Login" });
-  //   });
+  // computed: {
+  //   products() {
+  //     return this.$store.state.products.products;
+  //   },
   // },
+  computed: { ...mapState("products", ["products"]) },
   watch: {
     $route: {
       immediate: true,
@@ -84,18 +60,12 @@ export default {
       },
     },
   },
-  created() {
-    getApi
-      .get("/products/", {
-        headers: { Authorization: `Bearer ${this.$store.state.accessToken}` },
-      })
-      .then((res) => {
-        this.$store.state.APIData = res.data.data;
-      })
-      .catch((err) => {
-        console.error(err);
-        this.$router.push({ name: "Login" });
-      });
+  mounted() {
+    this.loading = true;
+    // this.$store.dispatch("products/getProducts");
+  },
+  methods: {
+    ...mapActions("products", ["getProducts"]),
   },
 };
 </script>
@@ -112,24 +82,6 @@ export default {
 .product table th {
   background-color: rgba(102, 189, 160, 0.486);
   padding: 0px 20px;
-}
-
-.modal-route {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-  width: 50%;
-  position: absolute;
-  background-color: #fff;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .color {

@@ -5,6 +5,9 @@ import Products from "../views/Products.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
+import Profile from "../views/Profile.vue";
+import Users from "../views/Users.vue";
+import User from "../views/User.vue";
 
 const routes = [
   {
@@ -16,31 +19,50 @@ const routes = [
     path: "/products",
     name: "Products",
     component: Products,
-    meta: {
-      requiresLogin: true,
-    },
-
+    // meta: {
+    //   requiresLogin: true,
+    // },
+    // children: [
+    //   {
+    //     path: ":id",
+    //     component: Product,
+    //     props: true,
+    //     meta: {
+    //       showModal: true,
+    //     },
+    //   },
+    // ],
+  },
+  {
+    path: "/products/:id",
+    name: "Product",
+    component: Product,
+    props: true,
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
+  {
+    path: "/user",
+    name: "Profile",
+    component: Profile,
+  },
+  {
+    path: "/users",
+    name: "Users",
+    component: Users,
     children: [
       {
         path: ":id",
-        component: Product,
+        component: User,
         props: true,
         meta: {
           showModal: true,
         },
       },
     ],
-  },
-  // {
-  //   path: "/products/:id",
-  //   name: "Product",
-  //   component: Product,
-  //   props: true,
-  // },
-  {
-    path: "/login",
-    name: "Login",
-    component: Login,
   },
   {
     path: "/logout",
@@ -50,7 +72,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 });
 

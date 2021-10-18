@@ -6,10 +6,15 @@ from users.models import User
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     pass
 
+class CustomStorageUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'is_vendor', 'is_staff')
+
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username','email','name','last_name')
+        fields = ('username', 'name', 'last_name', 'email', 'is_vendor', 'is_staff')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

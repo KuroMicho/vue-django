@@ -4,7 +4,7 @@
 <script>
 export default {
   created() {
-    this.$store.dispatch("userLogout").then(() => {
+    this.$store.dispatch("auth/logout").then(() => {
       this.$router.push({ name: "Login" });
     });
   },
