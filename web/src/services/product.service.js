@@ -10,16 +10,26 @@ class ProductService {
     return getApi.get(`products/${id}`, { headers: authHeader() });
   }
 
+  postProduct(data) {
+    return getApi.post(`product/`, data, { headers: authHeader() });
+  }
+
   putProduct(data, id) {
     return getApi.put(`products/${id}`, data, {
       headers: authHeader(),
     });
   }
 
-  patchColor(data, id) {
+  patchProduct(data, id) {
     return getApi.patch(`products/${id}`, data, {
       headers: authHeader(),
       // "X-CSRFToken": getApi.get("csrf/").then((res) => console.log(res.data)),
+    });
+  }
+
+  deleteProduct(id) {
+    return getApi.delete(`products/${id}`, {
+      headers: authHeader(),
     });
   }
 }

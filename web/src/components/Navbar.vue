@@ -8,7 +8,7 @@
         <router-link v-show="!user" to="/login">Login</router-link>
         <router-link v-show="!user" to="/register">Register</router-link>
 
-        <router-link v-if="user.is_vendor" to="/products"
+        <router-link v-if="user.is_vendor || user.is_staff" to="/products"
           >Productos</router-link
         >
         <router-link v-if="user.is_staff" to="/purchases"

@@ -1,6 +1,5 @@
 import { getApi } from "../utils/axios";
 import authHeader from "./auth-header";
-// import Cookies from "js-cookie";
 
 class UserService {
   getPublicContent() {
