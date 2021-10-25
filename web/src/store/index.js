@@ -2,9 +2,10 @@ import { createStore } from "vuex";
 // import { getApi } from "../utils/axios.js";
 import { auth } from "./auth.module";
 import { products } from "./products.module";
+import { sales } from "./sales.module";
 
 const store = createStore({
-  modules: { auth, products },
+  modules: { auth, products, sales },
   // getters: {
   //   loggedIn(state) {
   //     return state.accessToken != null;

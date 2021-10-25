@@ -21,8 +21,14 @@ export const auth = {
         });
     },
     logout({ commit }) {
-      AuthService.logout();
-      commit("logout");
+      AuthService.logout()
+        .then(() => {
+          commit("logout");
+          return Promise.resolve();
+        })
+        .catch((error) => {
+          return Promise.reject(error);
+        });
     },
     register({ commit }, user) {
       return AuthService.register(user)
@@ -35,6 +41,9 @@ export const auth = {
           return Promise.reject(error);
         });
     },
+    refreshToken({ commit }, accessToken) {
+      commit("refreshToken", accessToken);
+    },
   },
   mutations: {
     loginSuccess(state, user) {
@@ -43,17 +52,21 @@ export const auth = {
     },
     loginFailure(state) {
       state.status.loggedIn = false;
-      state.user = null;
+      state.user = {};
     },
     logout(state) {
       state.status.loggedIn = false;
-      state.user = null;
+      state.user = {};
     },
     registerSuccess(state) {
       state.status.loggedIn = false;
     },
     registerFailure(state) {
       state.status.loggedIn = false;
+    },
+    refreshToken(state, accessToken) {
+      state.status.loggedIn = true;
+      state.user = { ...state.user, accessToken: accessToken };
     },
   },
 };

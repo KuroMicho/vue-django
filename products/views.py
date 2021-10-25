@@ -46,11 +46,11 @@ class ProductRUDView(generics.RetrieveUpdateDestroyAPIView):
             serializer = ProductSerializer(product)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
-    def put(self, request, id=None, *args, **kwargs):
+    def put(self, request, id=None, *args, **kwargs):  
         if id:
             product = Product.objects.get(id=id)
             if int(request.data['minimum_required']) > int(product.inventory_onhand):
-                return Response({"status": "inventory on hand is not allowed to be less than minimum required"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"status" : "error", "msg": "inventory on hand is not allowed to be less than minimum required"}, status=status.HTTP_400_BAD_REQUEST)
             # if request.data['inventory_onhand'] != product.inventory_onhand:
             #     return Response({"status": "update inventory on hand is not allowed such as this way"}, status=status.HTTP_400_BAD_REQUEST)
             # if request.data['inventory_received'] != int(product.inventory_received):

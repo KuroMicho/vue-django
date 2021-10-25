@@ -57,9 +57,14 @@
         </template>
         <template #default="scope">
           <el-button
-            as="router-link"
             size="mini"
-            @click="this.$router.push(`/products/${scope.row.id}`)"
+            @click="this.$router.push(`/product/${scope.row.id}/sales/`)"
+          >
+            Sales
+          </el-button>
+          <el-button
+            size="mini"
+            @click="this.$router.push(`/product/${scope.row.id}`)"
           >
             Editar
           </el-button>

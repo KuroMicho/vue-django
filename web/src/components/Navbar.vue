@@ -11,12 +11,10 @@
         <router-link v-if="user.is_vendor || user.is_staff" to="/products"
           >Productos</router-link
         >
-        <router-link v-if="user.is_staff" to="/purchases"
-          >Purchases</router-link
-        >
+        <router-link v-if="user.is_staff" to="/sales">Sales</router-link>
         <router-link v-if="user.is_staff" to="/users">Users</router-link>
         <router-link v-if="user" to="/user">Profile</router-link>
-        <router-link v-if="user" to="/logout">Logout</router-link>
+        <a v-if="user" href="#" @click="handleLogout">Logout</a>
       </li>
     </ul>
   </div>
@@ -28,7 +26,17 @@ export default {
     return { user: 0 };
   },
   mounted() {
-    this.user = this.$store.state.auth.user.user;
+    if (!this.$store.state.auth.user) {
+      // return falsy value = null
+      this.user = 0; // for this component user = null
+    } else {
+      this.user = this.$store.state.auth.user.user; // otherwise, take user object
+    }
+  },
+  methods: {
+    handleLogout() {
+      this.$store.dispatch("auth/logout");
+    },
   },
 };
 </script>

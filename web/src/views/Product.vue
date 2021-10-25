@@ -116,7 +116,7 @@ export default {
         .dispatch("products/putProduct", { data: data, id: this.id })
         .then(() => this.$router.push("/products/"))
         .catch((error) => {
-          console.error(error.body);
+          console.error(error);
         });
     },
   },

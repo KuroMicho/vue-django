@@ -1,22 +1,18 @@
 import { getApi } from "../utils/axios";
-import authHeader from "./auth-header";
+// import authHeader from "./auth-header";
 
 class UserService {
-  getPublicContent() {
-    return getApi.get("/");
-  }
-
   getProfile() {
-    return getApi.get("user/", { headers: authHeader() });
+    return getApi.get("user/");
   }
 
   getUsers() {
-    return getApi.get("users/", { headers: authHeader() });
+    return getApi.get("users/");
   }
 
-  getUser() {
-    return getApi.get("users/:id", { headers: authHeader() });
-  }
+  // getUser() {
+  //   return getApi.get("users/:id", { headers: authHeader() });
+  // }
 }
 
 export default new UserService();

@@ -5,6 +5,7 @@ import store from "./store";
 import VueChartkick from "vue-chartkick";
 import "chartkick/chart.js";
 
+import setup from "./utils/setupInterceptors";
 import { FontAwesomeIcon } from "./plugins/font-awesome";
 
 // router.beforeEach((to, from, next) => {
@@ -32,6 +33,8 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+setup(store);
 
 createApp(App)
   .use(store)

@@ -1,4 +1,5 @@
 import { getApi } from "../utils/axios";
+import tokenService from "./token.service";
 
 class AuthService {
   login(user) {
@@ -10,7 +11,8 @@ class AuthService {
       .then((res) => {
         if (res.data.access_token) {
           if (res.data.user[user.role]) {
-            localStorage.setItem("user", JSON.stringify(res.data));
+            // localStorage.setItem("user", JSON.stringify(res.data));
+            tokenService.setUser(res.data);
             return res.data;
           } else {
             throw new Error("You are not allowed login with this role");
@@ -20,7 +22,15 @@ class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("user");
+    // localStorage.removeItem("user");
+    return getApi
+      .post("logout/", {
+        refresh_token: tokenService.getLocalRefreshToken(),
+      })
+      .then(() => {
+        // console.log("here");
+        tokenService.removeUser();
+      });
   }
 
   register(user) {

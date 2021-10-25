@@ -90,10 +90,13 @@ export const products = {
       state.retrieved = true;
     },
     putProductSuccess(state, product) {
+      // console.info(product);
       state.product = product;
+      state.retrieved = true;
     },
     patchProductSuccess(state, product) {
       state.product = product;
+      state.retrieved = true;
     },
     deleteProductSuccess(state, id) {
       // console.warn(id, state);
@@ -101,11 +104,9 @@ export const products = {
       state.retrieved = true;
     },
     getProductsFailure(state) {
-      state.products = null;
       state.retrieved = false;
     },
     getProductFailure(state) {
-      state.product = null;
       state.retrieved = false;
     },
     putProductFailure(state) {
